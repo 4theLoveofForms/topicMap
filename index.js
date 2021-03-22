@@ -37,6 +37,8 @@ var svg1 = d3.select("svg.broader-network"),
   width = +svg1.attr("width"),
   height = +svg1.attr("height")
 
+var svg2 = d3.select("svg.narrower-network")
+
 loadPage(changableData1)
 
 function loadPage(changingData, d = "") {
@@ -59,6 +61,11 @@ function loadPage(changingData, d = "") {
       .remove();
       // .attr('hidde', true);
 
+    d3.select('div.oval')
+      .attr("hidden",true);
+      // .remove()
+    // .attr('opacity', 0);
+
     d3.select('svg#oval')
       .attr('opacity', 0)
       .attr("ry", 0)
@@ -73,7 +80,7 @@ function loadPage(changingData, d = "") {
         .attr("ry", 15)
         .attr("rx", 35)
         // .attr("fill", "white")
-        // .attr("stroke-dasharray", 2)
+        .attr("stroke-dasharray", 2)
         .attr("cx", () => { return d.x; })
         .attr("cy", () => { return d.y; })
       // svg1.append('text')
@@ -92,12 +99,14 @@ function loadPage(changingData, d = "") {
 
   // wait a moment then bring the big oval back in and render the map
     setTimeout(() => {
+      d3.select('div.oval').attr("hidden",null);
       d3.select('svg#oval')
         .transition(1000)
         .attr('opacity', 1)
         .attr("ry", 15 * 5)
         .attr("rx", 35 * 5)
-      render(svg1, data)
+        render(svg1, data)
+        render(svg2, data)
     }, 300)
 
 
@@ -109,8 +118,11 @@ function loadPage(changingData, d = "") {
 // }
 
 function render (selection, data) {
+
+  
   let topics = data.broader_topics
   let links = data.broader_links
+
   let thisTopic = data.current_topic
 
   links.forEach(function (l) {
@@ -142,7 +154,7 @@ function render (selection, data) {
   .force("charge_force", d3.forceManyBody())
   .force("center_force", d3.forceCenter(width / 2, height / 2));
 
-  var nodes = svg1.append("g")
+  var nodes = selection.append("g")
     .attr("class", "nodes")
     .selectAll("ellipse").data(topics)
     .enter()
@@ -160,14 +172,14 @@ function render (selection, data) {
   //add link force to the simulation
   simulation.force("links", link_force)
 
-  var link = svg1.append("g")
+  var link = selection.append("g")
   .attr("class", "links")
   .selectAll("line")
   .data(links)
   .enter().append("line")
   .attr("stroke-width", 2);
 
-  var text = svg1.append("g")
+  var text = selection.append("g")
   .attr("class", "node-text")
   .attr("text-anchor", "middle")
   .selectAll("text")
@@ -184,7 +196,7 @@ function render (selection, data) {
   .attr("opacity", 0.7)
   ;
 
-  var nodeOver = svg1.append("g")
+  var nodeOver = selection.append("g")
     .attr("class", "nodes")
     .selectAll("ellipse")
     .data(topics)
