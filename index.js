@@ -53,7 +53,7 @@ function loadPage(changingData, d = "") {
     var data = changingData
     console.log()
     // document.getElementsByClassName('message')[0].innerHTML = JSON.stringify(data.current_topic.definition);
-    document.getElementsByClassName('message')[0].innerHTML = JSON.stringify(d.x) + "y:" + JSON.stringify(d.y);
+    document.getElementsByClassName('message')[0].innerHTML = JSON.stringify(d) + "y:" + JSON.stringify(d.y);
     // d3.selectAll('text').transition(10000)
     //   .attr('opacity', 0)
 
@@ -71,31 +71,42 @@ function loadPage(changingData, d = "") {
       .attr("ry", 0)
       .attr("rx", 0);
 
-    if (d.x) {
-      svg1.append('ellipse')
-        .attr('class', 'animation')
-        .attr("fill", "yellow")
-        .attr("stroke", 'black')
-        .attr("stroke-width", "2")
-        .attr("ry", 15)
-        .attr("rx", 35)
-        // .attr("fill", "white")
-        .attr("stroke-dasharray", 2)
-        .attr("cx", () => { return d.x; })
-        .attr("cy", () => { return d.y; })
-      // svg1.append('text')
-      // .text("hellloooooo")
-    }
+console.log("loadPage clicked: is it narrower? " + d.narrower)
+let selection = ""
+if (d.narrower == false) {
+  selection = svg1
+}
+else {
+  selection = svg2
+}
 
-  // wait a moment then animate it moving down
+  // if there is an x position to draw
+  if (d.x  ) {
+    console.log('animate')
+    selection.append('ellipse')
+    .attr('class', 'animation')
+    .attr("fill", "yellow")
+    .attr("stroke", 'black')
+    .attr("stroke-width", "2")
+    .attr("ry", 15)
+    .attr("rx", 35)
+    // .attr("fill", "white")
+    .attr("stroke-dasharray", 2)
+    .attr("cx", () => { return d.x; })
+    .attr("cy", () => { return d.y; })
+  }
+
+
+  // wait a moment then animate it growing and moving down or up
     setTimeout(() => {
-      d3.select('.animation').transition(1000)
+      d3.select('.animation').transition(500)
         .attr("ry", 15 * 5)
         .attr("rx", 35 * 5)
-        .attr("cx", height)
-        .attr("cy", 1000)
+        // .attr("cx", (d.narrower) ? height : "0px")
+        .attr("cx", width / 2)
+        .attr("cy", (d.narrower == false) ? height + 100 : -100)
         .remove()
-    }, 200)
+    }, 50)
 
   // wait a moment then bring the big oval back in and render the map
     setTimeout(() => {
@@ -124,17 +135,23 @@ function render (selection, data) {
   let thisTopic = data.current_topic
 
   if (selection == svg1) {
-    console.log("yes it works")
+    console.log("selection is svg1")
     topics = data.broader_topics
     links = data.broader_links
     // console.log(links[0].broader_topic_id)
+    topics.forEach(function (t) {
+      t.narrower = false;
+    });
   }
   else {
     topics = data.narrower_topics
     links = data.narrower_topic_links
-    console.log("yes this too works")
+    console.log("selection is svg2")
+    topics.forEach(function (t) {
+      t.narrower = true;
+    });
   }
-
+ console.log(topics[0].narrower)
 
   links.forEach(function (l) {
     l.source = l.narrower_topic_id;
