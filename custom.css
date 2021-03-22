@@ -38,6 +38,14 @@ svg.over {
 z-index: 1;
 }
 
+.nodes ellipse{
+  cursor: pointer;
+}
+
+.node-text text{
+  cursor: default;
+}
+
 /* svg {
   background-color: #fcf6c2;
 } */

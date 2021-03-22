@@ -228,10 +228,10 @@ function render (selection, data) {
   .enter()
   .append("text")
   .attr("id", function (d) { return "node-text" + d.id })
-  .on('click', function(d) {
-    console.log(d, 'click ---')
-    loadPage(changableData1, d);
-  })
+  // .on('click', function(d) {
+  //   console.log(d, 'click ---')
+  //   loadPage(changableData1, d);
+  // })
   .text((d) => d.definition)
   // .call(wrap)
   .attr("opacity", 0.7)
@@ -242,7 +242,7 @@ function render (selection, data) {
     .selectAll("ellipse")
     .data(topics)
     .enter()
-    .append("a")
+    // .append("a")
     // .attr("xlink:href", function (d) { return linkAddress + d.id })
     .append("ellipse")
     .attr("ry", function (d) {
@@ -259,6 +259,10 @@ function render (selection, data) {
       })
     .attr("fill", "white")
     .attr("opacity", 0)
+    .on('click', function(d) {
+      console.log(d, 'click ---')
+      loadPage(changableData1, d);
+    })
   .on("mouseover", function (d) {
     d3.select("#node-text" + d.id)
       // d3.select(function (d) { return "#node-text" + d.id.toString })
