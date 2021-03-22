@@ -119,23 +119,37 @@ function loadPage(changingData, d = "") {
 
 function render (selection, data) {
 
-  
-  let topics = data.broader_topics
-  let links = data.broader_links
-
+  let topics = []
+  let links = []
   let thisTopic = data.current_topic
+
+  if (selection == svg1) {
+    console.log("yes it works")
+    topics = data.broader_topics
+    links = data.broader_links
+    // console.log(links[0].broader_topic_id)
+  }
+  else {
+    topics = data.narrower_topics
+    links = data.narrower_topic_links
+    console.log("yes this too works")
+  }
+
 
   links.forEach(function (l) {
     l.source = l.narrower_topic_id;
     l.target = l.broader_topic_id;
   });
 
-  topics.map((obj) => {
-  if (obj.id === thisTopic.id) {
-    obj.fy = height + 15;
+  topics.map((topic) => {
+  if (topic.id === thisTopic.id && selection == svg1) {
+    topic.fy = height + 15;
   }
-  else if (obj.id === 210) {
-    obj.fy = 10;
+  else if (topic.id === thisTopic.id && selection == svg2) {
+    topic.fy = - 15;
+  }
+  else if (topic.id === 210) {
+    topic.fy = 10;
   }
 })
 
@@ -160,8 +174,18 @@ function render (selection, data) {
     .enter()
     .append("ellipse")
     // .attr("class", "nodes")
-    .attr("ry", 15)
-    .attr("rx", 35)
+    .attr("ry", function (d) {
+        if (d.ancestry_depth > 0)
+          { return 15 / d.ancestry_depth }
+        else
+          { return 15 }
+      })
+    .attr("rx", function (d) {
+        if (d.ancestry_depth > 0)
+          { return 35 / d.ancestry_depth }
+        else
+          { return 35 }
+      })
     .attr("fill", "white")
     .attr("stroke-dasharray", 2);
 
@@ -204,8 +228,18 @@ function render (selection, data) {
     .append("a")
     // .attr("xlink:href", function (d) { return linkAddress + d.id })
     .append("ellipse")
-    .attr("ry", 10)
-    .attr("rx", 30)
+    .attr("ry", function (d) {
+        if (d.ancestry_depth > 0)
+          { return 15 / d.ancestry_depth }
+        else
+          { return 15 }
+      })
+    .attr("rx", function (d) {
+        if (d.ancestry_depth > 0)
+          { return 35 / d.ancestry_depth }
+        else
+          { return 35 }
+      })
     .attr("fill", "white")
     .attr("opacity", 0)
   .on("mouseover", function (d) {
@@ -250,5 +284,30 @@ function render (selection, data) {
 
   //add tick instructions:
   simulation.on("tick", tickActions);
+
+      // dragable nodes
+    var drag_handler = d3.drag()
+    .on("start", drag_start)
+    .on("drag", drag_drag)
+    .on("end", drag_end);
+
+    function drag_start(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    // d.fy = d.x;
+    // d.fy = d.x;
+    }
+
+    function drag_drag(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function drag_end(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    drag_handler(nodeOver)
 
 }
