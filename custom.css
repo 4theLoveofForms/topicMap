@@ -1,0 +1,39 @@
+body {
+background: white; /* try type yellow */
+color: #323232;
+
+margin: 0;
+height: 100vh;
+
+/* display: flex;
+align-items: center;
+justify-content: center; */
+
+font-family: Helvetica neue, roboto;
+}
+
+.links line {
+stroke: #999;
+stroke-opacity: 0.6;
+}
+
+.nodes ellipse {
+stroke: rgb(126, 223, 46);
+stroke-width: 1.5px;
+}
+
+.node-text {
+font-size: 12px;
+}
+
+svg.broader_network {
+background-color: pink;
+}
+
+svg.narrower_network {
+background-color: pink;
+}
+
+svg.over {
+z-index: 1;
+}
