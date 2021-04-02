@@ -38,6 +38,12 @@ svg.over {
 z-index: 1;
 }
 
+p {
+  width: 100px;
+  color:black;
+  z-index:999999;
+}
+
 .nodes ellipse{
   cursor: pointer;
 }

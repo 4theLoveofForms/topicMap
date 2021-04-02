@@ -13,16 +13,39 @@
   <svg width="700" height="250" class="broader-network"></svg>
   <!-- <div id="chosen-one">
   </div> -->
-    <svg height="160" width="700" class="over" id="oval">
+    <!-- <svg height="160" width="700" class="over" id="oval">
       <ellipse cx="350" cy="80" rx="200" ry="79" style="fill:yellow;stroke:purple;stroke-width:2" />
-    </svg>
-  <!-- <div class="oval text-center " id="oval">
+    </svg> -->
+  <div class="oval text-center " id="oval">
     <p class="message box">
       The message will go here
     </p>
-  </div> -->
+
+    <a id="linksLink" href="/topics/69">
+      <button type="button" name="button" class="btn btn-primary">View links</button>
+    </a>
+    <form id="linkBroaderForm" action="/action_page.php">
+      First name: <input type="text" name="fname" value="Donald"><br>
+      Last name: <input type="text" name="lname" value="Duck"><br>
+      <input type="submit" value="Submit">
+    </form>
+    <p id="demo"></p>
+    <button onclick="myFunction()">Try it</button>
+    <script>
+      function myFunction() {
+        //var x = document.getElementById("myForm").action;
+        //var txt = "";
+        //var i;
+        //for (i = 0; i < x.length; i++) {
+        //  txt = txt + x.elements[i].type + "<br>";
+        //}
+        document.getElementById("myForm").action = "hi";
+      }
+      </script>
+  </div>
 
   <svg width="700" height="400" class="narrower-network"></svg>
+  <p id="quickDetails"></p>
   <script type="module" src="index.js" >
   </script>
 </body>
